@@ -1,4 +1,4 @@
-// VIMEE 
+  // VIMEE 
 // Communication based on ros bridge
 // to start communication, type in command "rosrun rosserial_python serial_node.py /dev/ttyACM0"
 
@@ -28,7 +28,7 @@ const int ECHOPIN1 = 3;
 const int TRIGPIN2 = 4;
 const int ECHOPIN2 = 5;
 
-const int SERVO = 8;
+const int SERVO = A8;
 
 // accelerometer constants
 const int YZERO1 = 340;
@@ -68,11 +68,15 @@ void setup() {
   // ros communication
   nh.getHardware()->setBaud(57600);
   nh.initNode();
+  // outgoing nodes
   nh.advertise(acc1);
   nh.advertise(acc2);
   nh.advertise(us1);
   nh.advertise(fsr1);
   nh.advertise(fsr2);
+  // incoming node(s)
+  nh.subscribe(servo);
+   
   
 //  // serial communication
 //  Serial.begin(9600);
@@ -129,8 +133,9 @@ long readUS1() {
   // Read the signal from the sensor: a HIGH pulse whose
   // duration is the time (in microseconds) from the sending
   // of the ping to the reception of its echo off of an object.
-  pinMode(ECHOPIN1, INPUT);
-  return pulseIn(ECHOPIN1, HIGH, 50); 
+  //pinMode(ECHOPIN1, INPUT);
+  //return pulseIn(ECHOPIN1, HIGH, 50); 
+  return pulseIn(ECHOPIN1, HIGH, 100);
 }
 
 // read ultrasound duration
@@ -147,7 +152,7 @@ long readUS2() {
   // duration is the time (in microseconds) from the sending
   // of the ping to the reception of its echo off of an object.
   pinMode(ECHOPIN2, INPUT);
-  return pulseIn(ECHOPIN2, HIGH, 50); 
+  return pulseIn(ECHOPIN2, HIGH); 
 }
 
 void openServo(){
