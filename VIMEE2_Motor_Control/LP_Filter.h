@@ -5,7 +5,7 @@
 #define LP_FILTER_H
 
 /*
- * cutoff 2.5hz, samplerate 333hz
+ * cutoff 2.5hz, samplerate 500hz
  */
 class  LP_filter
 {
@@ -20,8 +20,8 @@ class  LP_filter
     float filt(float x) //class II 
     {
       v[0] = v[1];
-      v[1] = (2.304624602137467573e-2 * x)
-         + (0.95390750795725065547 * v[0]);
+      v[1] = (1.546629140310340489e-2 * x)
+         + (0.96906741719379319022 * v[0]);
       return 
          (v[0] + v[1]);
     }

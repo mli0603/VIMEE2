@@ -1,14 +1,13 @@
 /*!
  * @file Adafruit_INA219.h
  *
- * This is a library for the Adafruit INA219 breakout board
+ * This is a library for the Adafruit Adafruit_INA219 breakout board
  * ----> https://www.adafruit.com/products/904
  * 
- * Adafruit invests time and resources providing this open source code, 
- * please support Adafruit and open-source hardware by purchasing 
- * products from Adafruit!
  *
  * Written by Kevin "KTOWN" Townsend for Adafruit Industries.
+ * Modified by Jeffrey Leong to implement DSSCircuits I2C libary instead of
+ * standard Wire library for bus-lockup timeout and added functions for VIMEE2
  *
  * BSD license, all text here must be included in any redistribution.
  *
@@ -23,7 +22,8 @@
  #include "WProgram.h"
 #endif
 
-#include <Wire.h>
+//#include <Wire.h>
+#include <I2C.h>
 
 /**************************************************************************/
 /*! 
@@ -207,25 +207,29 @@ enum {
 
 /**************************************************************************/
 /*! 
-    @brief  Class that stores state and functions for interacting with INA219 current/power monitor IC
+    @brief  Class that stores state and functions for interacting with Adafruit_INA219 current/power monitor IC
 */
 /**************************************************************************/
 class Adafruit_INA219{
  public:
   Adafruit_INA219(uint8_t addr = INA219_ADDRESS);
   void begin(void);
-  void begin(TwoWire *theWire);
+  //void begin(TwoWire *theWire);
   void setCalibration_32V_2A(void);
   void setCalibration_32V_1A(void);
   void setCalibration_16V_400mA(void);
+  void setCalibration_16V_400mA_11bit(void);
   float getBusVoltage_V(void);
   float getShuntVoltage_mV(void);
   float getCurrent_mA(void);
   float getPower_mW(void);
   void setAddr(uint8_t addr);
+  void scanBus(void);
+  void I2C_async_Rx(void);
 
  private:
-  TwoWire *_i2c;
+  //TwoWire *_i2c;
+	I2C *_i2c;
 
   uint8_t ina219_i2caddr;
   uint32_t ina219_calValue;
@@ -241,6 +245,16 @@ class Adafruit_INA219{
   int16_t getShuntVoltage_raw(void);
   int16_t getCurrent_raw(void);
   int16_t getPower_raw(void);
+
+  // TODO async receieve (polling method)
+  uint32_t buf_index;
+  void *AsyncRxBuffer[];						// buffer of addresses to store data async
+  //void *AsyncRxBuffer
+
+  //void getBusVoltage_raw(int16_t* v);
+  //void getShuntVoltage_raw(int16_t* v);
+  void getCurrent_raw(uint16_t* I);
+  //void getPower_raw(int16_t* P);
 };
 
 #endif
