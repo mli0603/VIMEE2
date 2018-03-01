@@ -93,6 +93,8 @@ void setup() {
 }
 
 void loop() {
+  
+  
   acc1_msg.data = readAngle(XACC1,YACC1,NEGONEG1,ONEG1,YZERO1);
   acc2_msg.data = readAngle(XACC2,YACC2,NEGONEG2,ONEG2,YZERO2);
   us1_msg.data = readUS1();
@@ -107,6 +109,8 @@ void loop() {
 
   nh.spinOnce();
   delay(20);
+  
+  
 }
 
 // read angle of accelerometer

@@ -43,6 +43,9 @@ void sensors_setup() {
   //Define servo pins
   pinMode(SERVO,OUTPUT);
   ser.attach(SERVO);
+  
+  // CLOSE servo on startup
+  closeServo();
 }
 
 unsigned long last_time_sensors;
@@ -60,9 +63,9 @@ void sensors_loop() {
     us1.publish( &us1_msg );
     fsr1.publish( &fsr1_msg );
     fsr2.publish( &fsr2_msg );
-  
-    nh.spinOnce();
   }
+  
+  nh.spinOnce();
 }
 
 // read angle of accelerometer
@@ -89,9 +92,8 @@ long readUS1() {
   // Read the signal from the sensor: a HIGH pulse whose
   // duration is the time (in microseconds) from the sending
   // of the ping to the reception of its echo off of an object.
-  //pinMode(ECHOPIN1, INPUT);
-  //return pulseIn(ECHOPIN1, HIGH, 50); 
-  return pulseIn(ECHOPIN1, HIGH, 100);
+  pinMode(ECHOPIN1, INPUT);
+  return pulseIn(ECHOPIN1, HIGH, 20*1000);
 }
 
 // read ultrasound duration
@@ -108,20 +110,20 @@ long readUS2() {
   // duration is the time (in microseconds) from the sending
   // of the ping to the reception of its echo off of an object.
   pinMode(ECHOPIN2, INPUT);
-  return pulseIn(ECHOPIN2, HIGH); 
-}
-
-void openServo(){
-  for (int pos = MIN*2; pos <= MAX; pos += 10) { // goes from 0 degrees to 180 degrees
-    // in steps of 1 degree
-    ser.writeMicroseconds(pos);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-  }
+  return pulseIn(ECHOPIN2, HIGH, 20*1000); 
 }
 
 void closeServo(){
+  for (int pos = MIN*2; pos <= MAX; pos += 10) { // goes from 0 degrees to 180 degrees
+    // in steps of 1 degree
+    ser.writeMicroseconds(pos);              // tell servo to go to position in variable 'pos'
+    delay(10);                       // waits 15ms for the servo to reach the position
+  }
+}
+
+void openServo(){
   for (int pos = MAX; pos >= MIN*2; pos -= 10) { // goes from 180 degrees to 0 degrees
     ser.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
+    delay(10);                       // waits 15ms for the servo to reach the position
   }
 }

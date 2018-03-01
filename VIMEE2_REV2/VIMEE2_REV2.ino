@@ -118,8 +118,7 @@ void loop(void)
   sensors_loop();
   Mot_A.ctrl_loop();
   Mot_B.ctrl_loop();
-
-
+  
   // measure loop rate for Arduino performance testing
   #ifdef DEBUG_PERF
     Serial.println(micros() - loop_time);                        // to check actual delay
