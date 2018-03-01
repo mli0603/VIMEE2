@@ -137,9 +137,8 @@ long readUS1() {
   // Read the signal from the sensor: a HIGH pulse whose
   // duration is the time (in microseconds) from the sending
   // of the ping to the reception of its echo off of an object.
-  //pinMode(ECHOPIN1, INPUT);
-  //return pulseIn(ECHOPIN1, HIGH, 50); 
-  return pulseIn(ECHOPIN1, HIGH, 100);
+  pinMode(ECHOPIN1, INPUT);
+  return pulseIn(ECHOPIN1, HIGH, 50000);
 }
 
 // read ultrasound duration
@@ -156,7 +155,7 @@ long readUS2() {
   // duration is the time (in microseconds) from the sending
   // of the ping to the reception of its echo off of an object.
   pinMode(ECHOPIN2, INPUT);
-  return pulseIn(ECHOPIN2, HIGH); 
+  return pulseIn(ECHOPIN2, HIGH, 50000); 
 }
 
 void openServo(){

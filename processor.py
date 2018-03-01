@@ -5,13 +5,17 @@ import sys
 import select
 import termios
 import tty
-from std_msgs.msg import Int16, Int64, Float32, Bool
+from std_msgs.msg import Int8,Int16, Int64, Float32, Bool
 import time
 import numpy as np
 from util import *
 
 SER_CLOSE_CMD = 'close'
 SER_OPEN_CMD = 'open'
+
+MOTOR_FORWARD_CMD = 'forward'
+MOTOR_BACKWARD_CMD = 'backward'
+MOTOR_STOP_CMD = 'stop'
 
 acc1 = []
 acc2 = []
@@ -87,10 +91,25 @@ def servo_control(cmd):
     print 'Sending command {} to servo'.format(cmd)
     if cmd == SER_OPEN_CMD:
         print 'open servo'
-        ser_pub.publish(True)
+        servo_pub.publish(True)
     elif cmd == SER_CLOSE_CMD:
         print 'close servo'
-        ser_pub.publish(False)
+        servo_pub.publish(False)
+    else:
+        print 'unknown command'
+
+# control motor
+def motor_control(cmd):
+    print 'Sending command {} to motor'.format(cmd)
+    if cmd == MOTOR_FORWARD_CMD:
+        print 'forward motor'
+        motor_pub.publish(1)
+    elif cmd == MOTOR_BACKWARD_CMD:
+        print 'backward motor'
+        motor_pub.publish(2)
+    elif cmd == MOTOR_STOP_CMD:
+        print 'stop motor'
+        motor_pub.publish(0)
     else:
         print 'unknown command'
 
@@ -112,14 +131,15 @@ def listener():
 # talker function that publishes all outgoing processed data topics
 
 def talker():
-    global acc1_pub, acc2_pub, us1_pub, us2_pub, fsr1_pub, fsr2_pub, ser_pub
+    global acc1_pub, acc2_pub, us1_pub, us2_pub, fsr1_pub, fsr2_pub, servo_pub, motor_pub
     acc1_pub = rospy.Publisher('acc1_processed', Float32, queue_size=10)
     acc2_pub = rospy.Publisher('acc2_processed', Float32, queue_size=10)
     us1_pub = rospy.Publisher('us1_processed', Float32, queue_size=10)
     us2_pub = rospy.Publisher('us2_processed', Float32, queue_size=10)
     fsr1_pub = rospy.Publisher('fsr1_processed', Int16, queue_size=10)
     fsr2_pub = rospy.Publisher('fsr2_processed', Int16, queue_size=10)
-    ser_pub = rospy.Publisher('servo', Bool, queue_size=10)
+    servo_pub = rospy.Publisher('servo', Bool, queue_size=10)
+    motor_pub = rospy.Publisher('servo', Int8, queue_size=10)
 
 
 def getKey():
@@ -148,9 +168,13 @@ if __name__ == '__main__':
             print 'Quit'
             break
         elif k == 'o':
-            # print 'Open servo'
             servo_control('open')
         elif k == 'c':
-            # print 'Close servo'
             servo_control('close')
+	elif k == '1':
+             motor_control(MOTOR_FORWARD_CMD)
+	elif k == '2':
+             motor_control(MOTOR_BACKWARD_CMD)
+	elif k == '0':
+             motor_control(MOTOR_STOP_CMD)
 
