@@ -16,6 +16,7 @@ pseudo multithread?
 #include "Mot_Ctrl.h"
 #include <ros.h>
 #include <std_msgs/Int8.h>
+#include <std_msgs/Bool.h> // for some reason it has to be here
 
 //#define DEBUG_PERF
 

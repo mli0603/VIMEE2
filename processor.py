@@ -138,8 +138,8 @@ def talker():
     us2_pub = rospy.Publisher('us2_processed', Float32, queue_size=10)
     fsr1_pub = rospy.Publisher('fsr1_processed', Int16, queue_size=10)
     fsr2_pub = rospy.Publisher('fsr2_processed', Int16, queue_size=10)
-    servo_pub = rospy.Publisher('servo', Bool, queue_size=10)
-    motor_pub = rospy.Publisher('servo', Int8, queue_size=10)
+    servo_pub = rospy.Publisher('servo', Bool, queue_size=1)
+    motor_pub = rospy.Publisher('motors', Int8, queue_size=1)
 
 
 def getKey():
