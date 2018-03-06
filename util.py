@@ -1,5 +1,3 @@
-WINDOWSIZE = 50
-
 # convert digital data to acceleration in unit of g
 def toDegree(radian):
     return radian/3.1415926*180

@@ -9,6 +9,7 @@ from std_msgs.msg import Int8,Int16, Int64, Float32, Bool
 import time
 import numpy as np
 from util import *
+from filter import *
 
 SER_CLOSE_CMD = 'close'
 SER_OPEN_CMD = 'open'
@@ -17,68 +18,52 @@ MOTOR_FORWARD_CMD = 'forward'
 MOTOR_BACKWARD_CMD = 'backward'
 MOTOR_STOP_CMD = 'stop'
 
-acc1 = []
-acc2 = []
+## kalman filter constants
 
-# kalman filter constants
-
-varVolt = 1.12184278324081E-05  # variance determined using excel and reading samples of raw sensor data
-varProcess = 1e-8
-Pc = 0.0
-G = 0.0
-P = 1.0
-Xp = 0.0
-Zp = 0.0
-Xe = 0.0
+#varVolt = 1.12184278324081E-05  # variance determined using excel and reading samples of raw sensor data
+#varProcess = 1e-8
+#Pc = 0.0
+#G = 0.0
+#P = 1.0
+#Xp = 0.0
+#Zp = 0.0
+#Xe = 0.0
 
 
-# kalman filter
+## kalman filter
 
-def kalmanFilter(val):
-    global P, Pc, varProcess, G, Xp, Zp, Xe
-    Pc = P + varProcess
-    G = Pc / (Pc + varVolt)  # kalman gain
-    P = (1 - G) * Pc
-    Xp = Xe
-    Zp = Xp
-    Xe = G * (val - Zp) + Xp  # the kalman estimate
-    return Xe
+#def kalmanFilter(val):
+#    global P, Pc, varProcess, G, Xp, Zp, Xe
+#    Pc = P + varProcess
+#    G = Pc / (Pc + varVolt)  # kalman gain
+#    P = (1 - G) * Pc
+#    Xp = Xe
+#    Zp = Xp
+#    Xe = G * (val - Zp) + Xp  # the kalman estimate
+#    return Xe
 
 
 # accelerometer callback, convert to g (9.81 m/s^2) and then publish
-
 def acc1_callback(data):
     if not np.isnan(data.data):
-        if len(acc1) < WINDOWSIZE:
-            acc1.append(data.data)
-        else:
-            acc1.pop(0)
-            acc1.append(data.data)
-        acc1_pub.publish(toDegree(sum(acc1) / len(acc1)))
+        acc1_pub.publish(toDegree(MA_ACC1(data.data)))
 
 
 def acc2_callback(data):
     if not np.isnan(data.data):
-        if len(acc2) < WINDOWSIZE:
-            acc2.append(data.data)
-        else:
-            acc2.pop(0)
-            acc2.append(data.data)
-        acc2_pub.publish(toDegree(sum(acc2) / len(acc2)))
+        acc2_pub.publish(toDegree(MA_ACC2(data.data)))
 
 
 # ultrasound callback, convert to cm, filter and then publish
-
 def us1_callback(data):
-    us1_pub.publish(kalmanFilter(toCm(data.data)))
+    us1_pub.publish(toCm(BW_US1(data.data)))
 
 
 def us2_callback(data):
-    us2_pub.publish(kalmanFilter(toCm(data.data)))
+    us2_pub.publish(toCm(BW_US2(data.data)))
 
 
 # fsr callback, TODO: convert to force and then publish
-
 def fsr1_callback(data):
     fsr1_pub.publish(data.data)
 
