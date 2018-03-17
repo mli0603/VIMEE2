@@ -25,10 +25,12 @@ int8_t Roll_dir_state=0;
 
 void setup(void) 
 {
-  Serial.begin(115200);
-  while (!Serial) {
-      delay(1);                             // will pause until serial console opens
-  }
+  #ifdef DEBUG
+    Serial.begin(115200);
+    while (!Serial) {
+        delay(1);                             // will pause until serial console opens
+    }
+  #endif
 
 // Enable internal pullups for twi. Necessary for non-MegaX28 brds as I2C/Wire library doesn't support 
 // Mega2560 
@@ -184,7 +186,9 @@ void Roll(int8_t dir){
   if (dir == fwd ){
     Mot_A.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
     Mot_B.drive(Default_speed, Mot_Polarity*dir, trque_ctrl);
+//    Mot_B.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
   } else if (dir == rev){
+//    Mot_A.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
     Mot_A.drive(Default_speed, Mot_Polarity*dir, trque_ctrl);
     Mot_B.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
   }

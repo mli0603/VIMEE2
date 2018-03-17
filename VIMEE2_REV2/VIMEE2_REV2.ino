@@ -22,7 +22,7 @@ pseudo multithread?
 
 /* param type, I2C address, pin1, pin2, curent_lim */
 Motor Mot_A('A', 0x40, 6, 5, 69.0); 
-Motor Mot_B('B', 0x44, 11, 10, 60.0);
+Motor Mot_B('B', 0x44, 11, 10, 69.0);
 
 // ROS Motors
 std_msgs::Int8 motors_msg;
@@ -205,9 +205,11 @@ void loop(void)
 void Roll(int8_t dir){
   if (dir == fwd ){
     Mot_A.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
-    Mot_B.drive(Default_speed, Mot_Polarity*dir, trque_ctrl);
+//    Mot_B.drive(Default_speed, Mot_Polarity*dir, trque_ctrl);
+    Mot_B.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
   } else if (dir == rev){
-    Mot_A.drive(Default_speed, Mot_Polarity*dir, trque_ctrl);
+    Mot_A.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
+//    Mot_A.drive(Default_speed, Mot_Polarity*dir, trque_ctrl);
     Mot_B.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
   }
 }

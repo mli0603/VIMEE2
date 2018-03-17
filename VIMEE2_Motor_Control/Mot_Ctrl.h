@@ -12,8 +12,8 @@
 //#define DEBUG_PLOT_B
 bool debug_called = false;
 
-#include <Adafruit_INA219.h>		// includes i2c library
-#include "LP_filter.h"
+#include "INA219.h"		// includes i2c library
+#include "LP_Filter.h"
 
 #define Default_speed 255
 #define Default_curr_lim 60.0                   // BEST @ ~60mA, tested on 25mm geared motors

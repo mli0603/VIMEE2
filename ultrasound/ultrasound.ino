@@ -20,6 +20,36 @@ long duration, cm, inches;
 //float Zp = 0.0;
 //float Xe = 0.0;
 
+
+
+//Low pass butterworth filter order=2 alpha1=0.02 
+class  FilterBuLp2
+{
+  public:
+    FilterBuLp2()
+    {
+      v[0]=0.0;
+      v[1]=0.0;
+    }
+  private:
+    float v[3];
+  public:
+    float step(float x) //class II 
+    {
+      v[0] = v[1];
+      v[1] = v[2];
+      v[2] = (3.621681514928615665e-3 * x)
+         + (-0.83718165125602272969 * v[0])
+         + (1.82269492519630826877 * v[1]);
+      return 
+         (v[0] + v[2])
+        +2 * v[1];
+    }
+};
+
+
+
+FilterBuLp2 filter;
  
 void setup() {
   //Serial Port begin
@@ -47,11 +77,12 @@ void loop()
 //  Zp = Xp;
 //  Xe = G*(cm-Zp)+Xp;   // the kalman estimate of the sensor voltage
 
-  Serial.print(duration);
-  Serial.print('\t');
   Serial.print(cm);
+  Serial.print('\t');
+//  Serial.print(cm);
+  Serial.print(filter.step(cm));
   Serial.println();
-  delay(20);
+  delay(10);
 }
 
 // read ultrasound duration
