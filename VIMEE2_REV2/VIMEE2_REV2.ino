@@ -28,25 +28,30 @@ Motor Mot_B('B', 0x44, 11, 10, 69.0);
 std_msgs::Int8 motors_msg;
 void motorsCallback( const std_msgs::Int8& toggle_msg){
   switch(toggle_msg.data) {
-    case 0 :                         
+    case stop_motor :                         
       Mot_A.stop(); 
       Mot_B.stop();   
       dvr_sleep();
 //      Serial.println("stopping motors");
 		break;
-    case 1 :			
+    case fwd_vol :			
       digitalWrite(DRV_Sleep,HIGH);     // enable DRV
 //      Roll_dir_state = fwd;                 
-      Roll(fwd);                      
+      Roll(fwd_vol);                      
 //      Serial.println("calling roll fwd");
 		break;
-    case 2 :					
+    case fwd_cur:
+      digitalWrite(DRV_Sleep,HIGH);     // enable DRV
+      Roll(fwd_cur); 
+    break;
+    case rev_vol :					
       digitalWrite(DRV_Sleep,HIGH);     // enable DRV
 //      Roll_dir_state = rev;		          
       Roll(rev);                      
 //      Serial.println("calling roll rev");
 		break;
-    
+    case rev_cur:
+    break;
   }
     
 }
@@ -203,14 +208,23 @@ void loop(void)
 }
 
 void Roll(int8_t dir){
-  if (dir == fwd ){
-    Mot_A.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
+  if (dir == fwd_vol ){
+    Mot_A.drive(Default_speed, Mot_Polarity*fwd, speed_ctrl);
 //    Mot_B.drive(Default_speed, Mot_Polarity*dir, trque_ctrl);
-    Mot_B.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
-  } else if (dir == rev){
-    Mot_A.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
+    Mot_B.drive(0, Mot_Polarity*fwd, speed_ctrl);
+  }
+  else if (dir == fwd_cur ){
+    Mot_A.drive(Default_speed, Mot_Polarity*fwd, speed_ctrl);
+    Mot_B.drive(Default_speed, Mot_Polarity*fwd, trque_ctrl);
+  }
+  else if (dir == rev_vol){
+    Mot_A.drive(Default_speed, Mot_Polarity*rev, speed_ctrl);
 //    Mot_A.drive(Default_speed, Mot_Polarity*dir, trque_ctrl);
-    Mot_B.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
+    Mot_B.drive(Default_speed, Mot_Polarity*rev, speed_ctrl);
+  }
+  else if (dir == rev_cur ){
+    Mot_A.drive(Default_speed, Mot_Polarity*rev, speed_ctrl);
+    Mot_B.drive(Default_speed, Mot_Polarity*rev, trque_ctrl);
   }
 }
 

@@ -14,8 +14,10 @@ from filter import *
 SER_CLOSE_CMD = 'close'
 SER_OPEN_CMD = 'open'
 
-MOTOR_FORWARD_CMD = 'forward'
-MOTOR_BACKWARD_CMD = 'backward'
+MOTOR_FORWARD_VOL_CMD = 'fwd_vol'
+MOTOR_FORWARD_CUR_CMD = 'fwd_cur'
+MOTOR_REVERSE_VOL_CMD = 'rev_vol'
+MOTOR_REVERSE_CUR_CMD = 'rev_cur'
 MOTOR_STOP_CMD = 'stop'
 
 ## kalman filter constants
@@ -86,12 +88,18 @@ def servo_control(cmd):
 # control motor
 def motor_control(cmd):
     print 'Sending command {} to motor'.format(cmd)
-    if cmd == MOTOR_FORWARD_CMD:
-        print 'forward motor'
+    if cmd == MOTOR_FORWARD_VOL_CMD:
+        print 'forward motor, voltage mode'
         motor_pub.publish(1)
-    elif cmd == MOTOR_BACKWARD_CMD:
-        print 'backward motor'
+    elif cmd == MOTOR_FORWARD_CUR_CMD:
+        print 'forward motor, current mode'
         motor_pub.publish(2)
+    elif cmd == MOTOR_REVERSE_VOL_CMD:
+        print 'reverse motor, voltage mode'
+        motor_pub.publish(3)
+    elif cmd == MOTOR_REVERSE_CUR_CMD:
+        print 'reverse motor, current mode'
+        motor_pub.publish(4)
     elif cmd == MOTOR_STOP_CMD:
         print 'stop motor'
         motor_pub.publish(0)
@@ -157,9 +165,9 @@ if __name__ == '__main__':
         elif k == 'c':
             servo_control('close')
 	elif k == '1':
-             motor_control(MOTOR_FORWARD_CMD)
+             motor_control(MOTOR_FORWARD_VOL_CMD)
 	elif k == '2':
-             motor_control(MOTOR_BACKWARD_CMD)
+             motor_control(MOTOR_FORWARD_CUR_CMD)
 	elif k == '0':
              motor_control(MOTOR_STOP_CMD)
 

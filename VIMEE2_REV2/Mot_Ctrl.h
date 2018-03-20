@@ -26,6 +26,14 @@ enum{
 };
 
 enum{
+  stop_motor = 0,
+  fwd_vol=1,
+  fwd_cur=2,
+  rev_vol=3,
+  rev_cur=4,
+};
+
+enum{
   speed_ctrl=false,
   trque_ctrl=true,
 };
