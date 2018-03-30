@@ -33,3 +33,36 @@ Please follow the instruction on ROS website. For example, to install ROS Kineti
 
 ## Install Arduino library
 The Arduino library installation can be found at http://wiki.ros.org/rosserial_arduino/Tutorials/Arduino%20IDE%20Setup
+button 
+## Set Up Wifi (esp8266)
+
+First, you must install the esp8266 add-on into your arduino ide in order to enable esp8266 flashing. The tutorial for how to set-up flash an esp8266 in the arduino ide can be found in the following links.
+
+https://learn.sparkfun.com/tutorials/esp8266-thing-hookup-guide/installing-the-esp8266-arduino-addon
+
+or alternative link
+
+https://randomnerdtutorials.com/how-to-install-esp8266-board-arduino-ide/
+
+
+The firmware to be flashed is under esproswifi directory. In order to flash, hold down the rest button on the arduino and both the reset and flash buttons on the shield. Click upload on the arduino IDE. When the arduino prompt changes from "Compiling" to "Uploading", immediately release the reset button, then the flash button in quick succession. 
+
+If upload process is done correctly, the blue LED will start flickering and the arduino IDE will start the firmware flashing process. Note that the reset button on the arduino must be pushed down (grounded) during the entirety of the flashing process and is only released once the arduino ide indicated that upload has been completed.
+
+In the esproswifi.ino, the baud rate (current default at 57600) should be changed according to the arduino ros baud rate. In addition, the SSID and password must be set depending on the network. Furthermore, the IP address must be set to the computer running roscore server (current default at 192.168.0.100). Then, the esp module must be reflashed.
+
+Please note that during flashing, the TX pin of the esp module must be connecting to the TX of arduino, RX to RX. However, during normal operation with ROS, the TX pin of the esp must be connected to the RX of the arduino and the RX pin of the esp must be connected to the TX of the arduino.
+
+In order to start the ros server, simply run in the linux terminal "roscore".
+
+In a separate terminal, run... 
+
+"rosrun rosserial_python serial_node.py _port:=tcp _baud:=<insert baud rate here>
+"
+
+ex. "rosrun rosserial_python serial_node.py _port:=tcp _baud:=57600"
+
+alternatively, if the default baud rate is being used you can run
+
+"rosrun rosserial_python serial_node.py tcp"
+
