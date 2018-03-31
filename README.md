@@ -73,4 +73,6 @@ rosrun rosserial_python serial_node.py tcp
 ```
 
 ## Note
-When flashing either Arduino or the Wi-Fi module esp8266, put the two switches on the green development board both to flashing position (marked in black). After flashing is completed, the two switches should both be put back to the operation position.
+When flashing either Arduino or the Wi-Fi module esp8266, put the two switches on the green development board, shown in the figure below, both to flashing position (to the left). After flashing is completed, the two switches should both be put back to the operation position (to the right).
+![alt text](https://github.com/mli0603/VIMEE2/blob/master/img/flash_switch.jpg)
+
