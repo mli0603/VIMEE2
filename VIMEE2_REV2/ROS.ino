@@ -13,8 +13,8 @@ ros::NodeHandle nh;
 std_msgs::Float32 acc1_msg;
 std_msgs::Float32 acc2_msg;
 
-ros::Publisher acc1("acc1", &acc1_msg); // swapped acc1 and acc2 to match the name on pcb //swapped back yet again
-ros::Publisher acc2("acc2", &acc2_msg); // swapped acc1 and acc2 to match the name on pcb //swapped back yet again
+ros::Publisher acc1("acc1", &acc1_msg); // Front Accelerometer
+ros::Publisher acc2("acc2", &acc2_msg); // Top Accelerometer
 
 std_msgs::Int64 us1_msg;
 ros::Publisher us1("us1", &us1_msg);
