@@ -47,10 +47,12 @@ void motorsCallback( const std_msgs::Int8& toggle_msg){
     case rev_vol :					
       digitalWrite(DRV_Sleep,HIGH);     // enable DRV
 //      Roll_dir_state = rev;		          
-      Roll(rev);                      
+      Roll(rev_vol);                      
 //      Serial.println("calling roll rev");
-		break;
+      break;
     case rev_cur:
+      digitalWrite(DRV_Sleep,HIGH);     // enable DRV
+      Roll(rev_cur); 
     break;
   }
     
