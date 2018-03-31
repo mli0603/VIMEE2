@@ -3,7 +3,7 @@
 // Servo
 Servo ser; 
 const int MAX = 2400;
-sconst int MIN = 750;
+const int MIN = 750;
 
 // pins
 const int XACC1 = A0;                  // acc1: x-axis of the accelerometer
