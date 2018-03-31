@@ -19,7 +19,7 @@ const int ECHOPIN1 = 3;
 const int TRIGPIN2 = 4;
 const int ECHOPIN2 = 5;
 
-const int SERVO = A6;
+const int SERVO = D6;
 
 // accelerometer constants
 const int YZERO1 = 340;
@@ -62,7 +62,7 @@ void sensors_loop() {
     acc1.publish( &acc1_msg );
     acc2.publish( &acc2_msg );
     us1.publish( &us1_msg );
-    us2.publish( &us2_msg );  
+    
     fsr1.publish( &fsr1_msg );
     fsr2.publish( &fsr2_msg );
   }
