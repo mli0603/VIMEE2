@@ -6,8 +6,8 @@
  * 
  * param type, I2C address, pin1, pin2, curent_lim
  */
-Motor Mot_A('A', 0x40, 6, 5, 69.0); 
-Motor Mot_B('B', 0x44, 11, 10, 60.0);
+Motor Mot_A('A', 0x40, 9, 8, 80.0); 
+Motor Mot_B('B', 0x41, 11, 10, 80.0);
 
 const int DRV_Sleep = 7;
 

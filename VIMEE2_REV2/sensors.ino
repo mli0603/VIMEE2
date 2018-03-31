@@ -14,12 +14,12 @@ const int YACC2 = A3;                  // acc2: y-axis of the accelerometer
 const int FSR1 = A4; 
 const int FSR2 = A5; 
 
-const int TRIGPIN1 = 2;
-const int ECHOPIN1 = 3;
-const int TRIGPIN2 = 4;
-const int ECHOPIN2 = 5;
+const int TRIGPIN1 = 3;
+const int ECHOPIN1 = 2;
+const int TRIGPIN2 = 5;
+const int ECHOPIN2 = 4;
 
-const int SERVO = A6;
+const int SERVO = 6;
 
 // accelerometer constants
 const int YZERO1 = 340;
