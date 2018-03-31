@@ -13,11 +13,13 @@ ros::NodeHandle nh;
 std_msgs::Float32 acc1_msg;
 std_msgs::Float32 acc2_msg;
 
-ros::Publisher acc1("acc1", &acc2_msg);
-ros::Publisher acc2("acc2", &acc1_msg);
+ros::Publisher acc1("acc1", &acc2_msg); // swapped acc1 and acc2 to match the name on pcb
+ros::Publisher acc2("acc2", &acc1_msg); // swapped acc1 and acc2 to match the name on pcb
 
 std_msgs::Int64 us1_msg;
 ros::Publisher us1("us1", &us1_msg);
+std_msgs::Int64 us2_msg;
+ros::Publisher us2("us2", &us2_msg);
 std_msgs::Int16 fsr1_msg;
 ros::Publisher fsr1("fsr1", &fsr1_msg);
 std_msgs::Int16 fsr2_msg;
@@ -44,6 +46,7 @@ void ROS_setup() {
   nh.advertise(acc1);
   nh.advertise(acc2);
   nh.advertise(us1);
+  nh.advertise(us2);
   nh.advertise(fsr1);
   nh.advertise(fsr2);
   // incoming node(s)

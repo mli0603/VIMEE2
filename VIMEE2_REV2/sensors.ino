@@ -55,12 +55,14 @@ void sensors_loop() {
     acc1_msg.data = readAngle(XACC1,YACC1,NEGONEG1,ONEG1,YZERO1);
     acc2_msg.data = readAngle(XACC2,YACC2,NEGONEG2,ONEG2,YZERO2);
     us1_msg.data = readUS1();
+    us2_msg.data = readUS2();
     fsr1_msg.data = analogRead(FSR1);
     fsr2_msg.data = analogRead(FSR2);
     
     acc1.publish( &acc1_msg );
     acc2.publish( &acc2_msg );
     us1.publish( &us1_msg );
+    us2.publish( &us2_msg );  
     fsr1.publish( &fsr1_msg );
     fsr2.publish( &fsr2_msg );
   }
