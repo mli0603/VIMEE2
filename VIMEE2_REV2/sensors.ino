@@ -19,7 +19,7 @@ const int ECHOPIN1 = 3;
 const int TRIGPIN2 = 4;
 const int ECHOPIN2 = 5;
 
-const int SERVO = A8;
+const int SERVO = A6;
 
 // accelerometer constants
 const int YZERO1 = 340;

@@ -11,9 +11,11 @@
 ros::NodeHandle nh;
 
 std_msgs::Float32 acc1_msg;
-ros::Publisher acc1("acc1", &acc1_msg);
 std_msgs::Float32 acc2_msg;
-ros::Publisher acc2("acc2", &acc2_msg);
+
+ros::Publisher acc1("acc1", &acc2_msg);
+ros::Publisher acc2("acc2", &acc1_msg);
+
 std_msgs::Int64 us1_msg;
 ros::Publisher us1("us1", &us1_msg);
 std_msgs::Int16 fsr1_msg;
@@ -21,10 +23,10 @@ ros::Publisher fsr1("fsr1", &fsr1_msg);
 std_msgs::Int16 fsr2_msg;
 ros::Publisher fsr2("fsr2", &fsr2_msg);
 
-// Servo 
+// Servo
 std_msgs::Bool servo_msg;
-void servoCallback( const std_msgs::Bool& toggle_msg){
-  if(toggle_msg.data)
+void servoCallback( const std_msgs::Bool& toggle_msg) {
+  if (toggle_msg.data)
     openServo();
   else
     closeServo();
@@ -33,9 +35,9 @@ void servoCallback( const std_msgs::Bool& toggle_msg){
 ros::Subscriber<std_msgs::Bool> servo("servo", &servoCallback );
 
 
-void ROS_setup(){
-  
-    // ros communication
+void ROS_setup() {
+
+  // ros communication
   nh.getHardware()->setBaud(57600);
   nh.initNode();
   // outgoing nodes
