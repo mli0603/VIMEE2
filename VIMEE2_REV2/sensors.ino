@@ -3,7 +3,7 @@
 // Servo
 Servo ser; 
 const int MAX = 2400;
-const int MIN = 544;
+sconst int MIN = 750;
 
 // pins
 const int XACC1 = A0;                  // acc1: x-axis of the accelerometer
@@ -14,12 +14,12 @@ const int YACC2 = A3;                  // acc2: y-axis of the accelerometer
 const int FSR1 = A4; 
 const int FSR2 = A5; 
 
-const int TRIGPIN1 = 2;
-const int ECHOPIN1 = 3;
-const int TRIGPIN2 = 4;
-const int ECHOPIN2 = 5;
+const int TRIGPIN1 = 3;
+const int ECHOPIN1 = 2;
+const int TRIGPIN2 = 5;
+const int ECHOPIN2 = 4;
 
-const int SERVO = D6;
+const int SERVO = 6;
 
 // accelerometer constants
 const int YZERO1 = 340;
@@ -62,7 +62,7 @@ void sensors_loop() {
     acc1.publish( &acc1_msg );
     acc2.publish( &acc2_msg );
     us1.publish( &us1_msg );
-    
+    us2.publish( &us2_msg );  
     fsr1.publish( &fsr1_msg );
     fsr2.publish( &fsr2_msg );
   }
