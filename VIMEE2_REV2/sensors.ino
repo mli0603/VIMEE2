@@ -6,8 +6,8 @@ const int MAX = 2400;
 const int MIN = 750;
 
 // pins
-const int XACC1 = A0;                  // acc1: x-axis of the accelerometer
-const int YACC1 = A1;                  // acc1: y-axis of the accelerometer
+const int XACC1 = A1;                  // acc1: x-axis of the accelerometer
+const int YACC1 = A0;                  // acc1: y-axis of the accelerometer
 const int XACC2 = A2;                  // acc2: x-axis of the accelerometer
 const int YACC2 = A3;                  // acc2: y-axis of the accelerometer
 
