@@ -45,7 +45,7 @@ or alternative link
 https://randomnerdtutorials.com/how-to-install-esp8266-board-arduino-ide/
 
 
-The firmware to be flashed is under esproswifi directory. In order to flash, hold down the rest button on the arduino and both the reset and flash buttons on the shield. Click upload on the arduino IDE. When the arduino prompt changes from "Compiling" to "Uploading", immediately release the reset button, then the flash button in quick succession. 
+The firmware to be flashed is under esproswifi directory. In order to flash, hold down the reset button on the arduino and both the reset and flash buttons on the shield. Click upload on the arduino IDE. When the arduino prompt changes from "Compiling" to "Uploading", immediately release the reset button, then the flash button in quick succession. 
 
 If upload process is done correctly, the blue LED will start flickering and the arduino IDE will start the firmware flashing process. Note that the reset button on the arduino must be pushed down (grounded) during the entirety of the flashing process and is only released once the arduino ide indicated that upload has been completed.
 
@@ -57,16 +57,16 @@ In order to start the ros server, simply run in the linux terminal "roscore".
 
 In a separate terminal, run... 
 
-```
-rosrun rosserial_python serial_node.py _port:=tcp _baud:=<insert baud rate here>
+```rosrun rosserial_python serial_node.py _port:=tcp _baud:=<insert baud rate here>
 ```
 
-ex. "rosrun rosserial_python serial_node.py _port:=tcp _baud:=57600"
+ex. 
+```rosrun rosserial_python serial_node.py _port:=tcp _baud:=57600
+```
 
 alternatively, if the default baud rate is being used you can run
 
-```
-rosrun rosserial_python serial_node.py tcp
+```rosrun rosserial_python serial_node.py tcp
 ```
 
 ## Note
