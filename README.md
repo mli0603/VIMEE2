@@ -57,16 +57,19 @@ In order to start the ros server, simply run in the linux terminal "roscore".
 
 In a separate terminal, run... 
 
-```rosrun rosserial_python serial_node.py _port:=tcp _baud:=<insert baud rate here>
+```
+rosrun rosserial_python serial_node.py _port:=tcp _baud:=<insert baud rate here>
 ```
 
 ex. 
-```rosrun rosserial_python serial_node.py _port:=tcp _baud:=57600
+```
+rosrun rosserial_python serial_node.py _port:=tcp _baud:=57600
 ```
 
 alternatively, if the default baud rate is being used you can run
 
-```rosrun rosserial_python serial_node.py tcp
+```
+rosrun rosserial_python serial_node.py tcp
 ```
 
 ## Note
