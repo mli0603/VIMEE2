@@ -1,5 +1,5 @@
 
-WINDOWSIZE = 20 
+WINDOWSIZE = 10 
 
 acc1 = []
 acc2 = []
