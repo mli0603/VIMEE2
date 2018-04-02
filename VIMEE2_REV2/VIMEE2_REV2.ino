@@ -21,8 +21,8 @@ pseudo multithread?
 //#define DEBUG_PERF
 
 /* param type, I2C address, pin1, pin2, curent_lim */
-Motor Mot_A('A', 0x40, 11, 10, 80.0);               // front motor
-Motor Mot_B('B', 0x41, 9, 8, 80.0);                // back motor
+Motor Mot_A('A', 0x41, 11, 10, 80.0);               // front motor
+Motor Mot_B('B', 0x40, 9, 8, 80.0);                // back motor
 
 // ROS Motors
 std_msgs::Int8 motors_msg;
@@ -124,8 +124,9 @@ void loop(void)
   }
 
   sensors_loop();
-  Mot_A.ctrl_loop();
   Mot_B.ctrl_loop();
+  Mot_A.ctrl_loop();
+  servoloop();
   
   // measure loop rate for Arduino performance testing
   #ifdef DEBUG_PERF
@@ -220,13 +221,13 @@ void Roll(int8_t dir){
     Mot_B.drive(Default_speed, Mot_Polarity*fwd, trque_ctrl);
   }
   else if (dir == rev_vol){
-    Mot_A.drive(Default_speed, Mot_Polarity*rev, speed_ctrl);
 //    Mot_A.drive(Default_speed, Mot_Polarity*dir, trque_ctrl);
+    Mot_A.drive(Default_speed, Mot_Polarity*rev, speed_ctrl);
     Mot_B.drive(Default_speed, Mot_Polarity*rev, speed_ctrl);
   }
   else if (dir == rev_cur ){
-    Mot_A.drive(Default_speed, Mot_Polarity*rev, speed_ctrl);
-    Mot_B.drive(Default_speed, Mot_Polarity*rev, trque_ctrl);
+    Mot_A.drive(Default_speed, Mot_Polarity*rev, trque_ctrl);
+    Mot_B.drive(Default_speed, Mot_Polarity*rev, speed_ctrl);
   }
 }
 

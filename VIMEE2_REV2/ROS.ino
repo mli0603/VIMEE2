@@ -28,10 +28,14 @@ ros::Publisher fsr2("fsr2", &fsr2_msg);
 // Servo
 std_msgs::Bool servo_msg;
 void servoCallback( const std_msgs::Bool& toggle_msg) {
-  if (toggle_msg.data)
-    openServo();
-  else
-    closeServo();
+  if (toggle_msg.data){
+//    openServo();/
+    servo_setopenflag();
+  }
+  else{
+//    closeServo();/
+    servo_setcloseflag();
+  }
 }
 
 ros::Subscriber<std_msgs::Bool> servo("servo", &servoCallback );

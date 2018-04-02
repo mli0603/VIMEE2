@@ -88,6 +88,12 @@ class  Motor
 
 	  void drive(byte speed, int8_t dir, bool limit_current){
   		speed = (byte)constrain(speed, 0, 255);
+     Serial.print(type);
+     Serial.print(" ");
+      Serial.print(last_PWM); 
+      Serial.println(" ");
+      
+
       
   		if (dir == fwd){
         analogWrite(pin1, speed);

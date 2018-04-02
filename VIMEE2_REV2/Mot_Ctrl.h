@@ -107,7 +107,7 @@ class  Motor
 
 	  void drive(byte speed, int8_t dir, bool limit_current){
   		speed = (byte)constrain(speed, 0, 255);
-                if (direct == 0) desired_speed = speed;      // set desired speed upon first call to drive
+      if (direct == 0) desired_speed = speed;      // set desired speed upon first call to drive
                 
   		if (dir == fwd){
                   analogWrite(pin1, speed);
@@ -136,7 +136,7 @@ class  Motor
   		analogWrite(pin1, 0);
   		analogWrite(pin2,0);
                 
-                desired_speed = 0;
+      desired_speed = 0;
   		last_PWM = 0;
   		direct = 0;
   		limit_curr = false;

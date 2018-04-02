@@ -2,8 +2,14 @@
 
 // Servo
 Servo ser; 
-const int MAX = 2000;
-const int MIN = 750;
+const int MAX = 2400;   // open position
+const int MIN = 750;    // close position
+
+// flags that get flipped from ross msg
+bool servo_open = false;
+bool servo_close = false;
+unsigned long last_time_servo = 0;
+int servo_pos = 2*MIN;
 
 // pins
 const int XACC1 = A0;                  // acc1: x-axis of the accelerometer
@@ -30,9 +36,11 @@ const int YZERO2 = 344;
 const int NEGONEG2 = 281;
 const int ONEG2 = 417;                 // acc2
 
+// data rates (in ms)
+byte sensor_sampling_rate = 20;
+byte servo_movement_rate = 10;
+
 void sensors_setup() {
-//  // serial communication
-//  Serial.begin(9600);
 
   //Define inputs and outputs for ultrasound
   pinMode(TRIGPIN1, OUTPUT);
@@ -45,12 +53,13 @@ void sensors_setup() {
   ser.attach(SERVO);
   
   // CLOSE servo on startup
-  closeServo();
+  //  closeServo();/
+  ser.writeMicroseconds(2*MIN);   
 }
 
 unsigned long last_time_sensors;
 void sensors_loop() {
-  if ( millis() > last_time_sensors + 20){
+  if ( millis() > last_time_sensors + sensor_sampling_rate){
     last_time_sensors = millis();
     acc1_msg.data = readAngle(ZACC1,XACC1,NEGONEG1,ONEG1,YZERO1);
     acc2_msg.data = readAngle(XACC2,YACC2,NEGONEG2,ONEG2,YZERO2);
@@ -124,16 +133,63 @@ long readUS2() {
 }
 
 void closeServo(){
-  for (int pos = MIN*2; pos <= MAX; pos += 10) { // goes from 0 degrees to 180 degrees
-    // in steps of 1 degree
-    ser.writeMicroseconds(pos);              // tell servo to go to position in variable 'pos'
-    delay(10);                       // waits 15ms for the servo to reach the position
-  }
+   
+  if (millis() > last_time_servo + servo_movement_rate){
+    last_time_servo = millis();
+    ser.write(servo_pos);              // tell servo to go to position in variable 'pos'
+    servo_pos += 10;
+  }   
+
 }
 
 void openServo(){
-  for (int pos = MAX; pos >= MIN*2; pos -= 10) { // goes from 180 degrees to 0 degrees
-    ser.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(10);                       // waits 15ms for the servo to reach the position
+      
+  if (millis() > last_time_servo + servo_movement_rate){
+    last_time_servo = millis();
+    ser.write(servo_pos);              // tell servo to go to position in variable 'pos'
+    servo_pos -= 10;
+  }   
+
+}
+
+void servoloop(){
+  if (servo_open){
+    openServo();
+    if (servo_pos <= MIN*2) {
+      servo_open = false;
+      servo_pos = MIN*2;
+    }
+  } else if (servo_close){
+    closeServo();
+    if (servo_pos >= MAX) {
+      servo_close = false;
+      servo_pos = MAX;
+    }
   }
 }
+
+void servo_setopenflag(){
+  servo_open = true;
+  servo_close = false;
+}
+
+void servo_setcloseflag(){
+  servo_open = false;
+  servo_close = true;
+}
+
+// blocking implementation
+//void closeServo(){
+//  for (int pos = MIN*2; pos <= MAX; pos += 10) { // goes from 0 degrees to 180 degrees
+//    // in steps of 1 degree
+//    ser.writeMicroseconds(pos);              // tell servo to go to position in variable 'pos'
+//    delay(10);                       // waits 15ms for the servo to reach the position
+//  }
+//}
+//
+//void openServo(){
+//  for (int pos = MAX; pos >= MIN*2; pos -= 10) { // goes from 180 degrees to 0 degrees
+//    ser.write(pos);              // tell servo to go to position in variable 'pos'
+//    delay(10);                       // waits 15ms for the servo to reach the position
+//  }
+//}

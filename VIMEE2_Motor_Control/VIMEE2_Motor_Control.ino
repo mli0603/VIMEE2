@@ -6,8 +6,8 @@
  * 
  * param type, I2C address, pin1, pin2, curent_lim
  */
-Motor Mot_A('A', 0x40, 9, 8, 80.0); 
-Motor Mot_B('B', 0x41, 11, 10, 80.0);
+Motor Mot_A('A', 0x41, 11, 10, 80.0);               // front motor
+Motor Mot_B('B', 0x40, 9, 8, 80.0);                // back motor
 
 const int DRV_Sleep = 7;
 
@@ -112,23 +112,9 @@ void loop(void)
 #endif
 
 // Motor Control loop 
-//  if (Mot_A.limit_curr){
-//    Mot_A.curr_limit();
-//  }
-//  if (Mot_B.limit_curr){
-//    Mot_B.curr_limit();
-//  }
-
-  // TODO drive ramp up slew, replace curr.lim and drive with one function to loop
-  // different ramp up rate and current lim rate
-//  if (Roll_dir_state == fwd){
-//    Roll(fwd);
-//  } else if (Roll_dir_state == rev){
-//    Roll(rev);
-//  }
-
   Mot_A.ctrl_loop();
   Mot_B.ctrl_loop();
+  
 
   // serial commands for motor control
   if (Serial.available() > 0) {
@@ -185,11 +171,11 @@ void loop(void)
 void Roll(int8_t dir){
   if (dir == fwd ){
     Mot_A.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
-    Mot_B.drive(Default_speed, Mot_Polarity*dir, trque_ctrl);
-//    Mot_B.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
+//    Mot_B.drive(Default_speed, Mot_Polarity*dir, trque_ctrl);
+    Mot_B.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
   } else if (dir == rev){
-//    Mot_A.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
-    Mot_A.drive(Default_speed, Mot_Polarity*dir, trque_ctrl);
+    Mot_A.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
+//    Mot_A.drive(Default_speed, Mot_Polarity*dir, trque_ctrl);
     Mot_B.drive(Default_speed, Mot_Polarity*dir, speed_ctrl);
   }
 }
