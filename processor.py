@@ -121,6 +121,7 @@ def listener():
     rospy.Subscriber('acc1', Float32, acc1_callback)
     rospy.Subscriber('acc2', Float32, acc2_callback)
     rospy.Subscriber('us1', Int64, us1_callback)
+    rospy.Subscriber('us2', Int64, us2_callback)
     rospy.Subscriber('fsr1', Int16, fsr1_callback)
     rospy.Subscriber('fsr2', Int16, fsr2_callback)
 
