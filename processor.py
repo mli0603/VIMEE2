@@ -169,9 +169,11 @@ if __name__ == '__main__':
             print 'Quit'
             break
         elif k == 'o':
-            servo_control('open')
+            #servo_control('open')
+            servo_control('close') # servo is physically flipped to open the front claw
         elif k == 'c':
-            servo_control('close')
+            #servo_control('close')
+            servo_control('open') # servo is physically flipped to open the front claw
 	elif k == '1':
              motor_control(MOTOR_FORWARD_VOL_CMD)
 	elif k == '2':
