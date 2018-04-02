@@ -20,6 +20,9 @@ MOTOR_REVERSE_VOL_CMD = 'rev_vol'
 MOTOR_REVERSE_CUR_CMD = 'rev_cur'
 MOTOR_STOP_CMD = 'stop'
 
+LOW_FREQ = 10
+HIGH_FREQ = 100
+
 ## kalman filter constants
 
 #varVolt = 1.12184278324081E-05  # variance determined using excel and reading samples of raw sensor data
@@ -59,6 +62,7 @@ def acc2_callback(data):
 # ultrasound callback, convert to cm, filter and then publish
 def us1_callback(data):
     us1_pub.publish(toCm(BW_US1(data.data)))
+    #us1_pub.publish(toCm(BWBP_US1(data.data)))
 
 
 def us2_callback(data):
@@ -150,6 +154,10 @@ def getKey():
 if __name__ == '__main__':
     settings = termios.tcgetattr(sys.stdin)
 
+    # initialize bandpass filter parameter b and a
+    # b and a are stored as global varaibles in filter.py
+    #findBWBandpassParameter(LOW_FREQ, HIGH_FREQ)
+
     print 'processing starts, all topics are up'
     talker()
     listener()
@@ -167,7 +175,11 @@ if __name__ == '__main__':
 	elif k == '1':
              motor_control(MOTOR_FORWARD_VOL_CMD)
 	elif k == '2':
-             motor_control(MOTOR_FORWARD_CUR_CMD)
+             motor_control(MOTOR_FORWARD_CUR_CMD)   
+	elif k == '3':
+             motor_control(MOTOR_REVERSE_VOL_CMD)
+	elif k == '4':
+             motor_control(MOTOR_REVERSE_CUR_CMD)
 	elif k == '0':
              motor_control(MOTOR_STOP_CMD)
 

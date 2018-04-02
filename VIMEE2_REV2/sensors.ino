@@ -2,22 +2,22 @@
 
 // Servo
 Servo ser; 
-const int MAX = 2400;
+const int MAX = 2000;
 const int MIN = 750;
 
 // pins
 const int XACC1 = A0;                  // acc1: x-axis of the accelerometer
-const int YACC1 = A1;                  // acc1: y-axis of the accelerometer
+const int ZACC1 = A1;                  // acc1: Z-axis of the accelerometer
 const int XACC2 = A2;                  // acc2: x-axis of the accelerometer
 const int YACC2 = A3;                  // acc2: y-axis of the accelerometer
 
 const int FSR1 = A4; 
 const int FSR2 = A5; 
 
-const int TRIGPIN1 = 2;
-const int ECHOPIN1 = 3;
-const int TRIGPIN2 = 4;
-const int ECHOPIN2 = 5;
+const int TRIGPIN1 = 3;
+const int ECHOPIN1 = 2;
+const int TRIGPIN2 = 5;
+const int ECHOPIN2 = 4;
 
 const int SERVO = 6;
 
@@ -52,7 +52,7 @@ unsigned long last_time_sensors;
 void sensors_loop() {
   if ( millis() > last_time_sensors + 20){
     last_time_sensors = millis();
-    acc1_msg.data = readAngle(XACC1,YACC1,NEGONEG1,ONEG1,YZERO1);
+    acc1_msg.data = readAngle(ZACC1,XACC1,NEGONEG1,ONEG1,YZERO1);
     acc2_msg.data = readAngle(XACC2,YACC2,NEGONEG2,ONEG2,YZERO2);
     us1_msg.data = readUS1();
     us2_msg.data = readUS2();
@@ -71,14 +71,22 @@ void sensors_loop() {
 }
 
 // read angle of accelerometer
-float readAngle(int xpin, int ypin, int negative, int positive, int yzero){
-  float acc = 2.0*(analogRead(xpin)-negative)/(positive-negative)-1;
-  if (analogRead(ypin) < yzero){
-    return acos(acc);
-  }
-  else{
-    return -acos(acc);
-  }
+//float readAngle(int xpin, int ypin, int negative, int positive, int yzero){
+//  float acc = 2.0*(analogRead(xpin)-negative)/(positive-negative)-1;
+//  if (analogRead(ypin) < yzero){
+//    return acos(acc);
+//  }
+//  else{
+//    return -acos(acc);
+//  }
+//}
+
+
+// returns roll angle of accelerometer in rads Updated Mar31
+float readAngle(int axis2, int downaxis, float negative, float positive, float zero){
+  float downval= (analogRead(downaxis)-zero)/(positive-negative)*3.14159265358;      // (scaled by ratio of posG-negG (which is 180 degree in ADC vals), and Pi
+  float val2= (analogRead(axis2)-zero)/(positive-negative)*3.14159265358;
+  return atan2(downval,val2);
 }
 
 // read ultrasound duration

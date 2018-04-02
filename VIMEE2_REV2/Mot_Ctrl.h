@@ -18,7 +18,7 @@ bool debug_called = false;
 
 #define Default_speed 255
 #define Default_curr_lim 60.0                   // BEST @ ~60mA, tested on 25mm geared motors
-#define Mot_Polarity -1
+#define Mot_Polarity 1
 
 enum{
   fwd=1,
@@ -51,6 +51,7 @@ class  Motor
     byte PWM_Drive_slew = 3;
     byte slew_freq = 50;      // hz, 50hz = 20ms
     unsigned long last_slew_time;
+    byte desired_speed;
 
     // current limit vars
     const int Samp_Freq = 500;   
@@ -106,14 +107,15 @@ class  Motor
 
 	  void drive(byte speed, int8_t dir, bool limit_current){
   		speed = (byte)constrain(speed, 0, 255);
-      
+                if (direct == 0) desired_speed = speed;      // set desired speed upon first call to drive
+                
   		if (dir == fwd){
-        analogWrite(pin1, speed);
-        analogWrite(pin2,0);   
+                  analogWrite(pin1, speed);
+                  analogWrite(pin2,0);   
   		}
   		else if (dir == rev){
-        analogWrite(pin2, speed);
-        analogWrite(pin1,0);
+                  analogWrite(pin2, speed);
+                  analogWrite(pin1,0);
   		}
       
 //  		last_PWM = speed;
@@ -133,7 +135,8 @@ class  Motor
 	  void stop(){
   		analogWrite(pin1, 0);
   		analogWrite(pin2,0);
-  
+                
+                desired_speed = 0;
   		last_PWM = 0;
   		direct = 0;
   		limit_curr = false;
@@ -191,10 +194,10 @@ class  Motor
         //      Serial.println(millis() - last_slew_time);                                   // check actual delay, if meeting freq
         last_slew_time = millis();
 
-        if (last_PWM <= Default_speed - PWM_Drive_slew || last_PWM >= PWM_Drive_slew){
-          last_PWM = (byte)constrain(Default_speed, last_PWM - PWM_Drive_slew, last_PWM + PWM_Drive_slew);
-        } else if ( last_PWM > Default_speed - PWM_Drive_slew){
-          last_PWM = Default_speed;
+        if (last_PWM <= desired_speed - PWM_Drive_slew || last_PWM >= PWM_Drive_slew){
+          last_PWM = (byte)constrain(desired_speed, last_PWM - PWM_Drive_slew, last_PWM + PWM_Drive_slew);
+        } else if ( last_PWM > desired_speed - PWM_Drive_slew){
+          last_PWM = desired_speed;
         } else {
           last_PWM = 0;
         }

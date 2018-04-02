@@ -14,7 +14,7 @@ const int YACC1 = A1;                  // acc1: y-axis of the accelerometer (act
 const int XACC2 = A2;                  // acc2: x-axis of the accelerometer
 const int YACC2 = A3;                  // acc2: y-axis of the accelerometer
 
-double acc_scale = 3.3/5.0*1023;
+//double acc_scale = 3.3/5.0*1023;
 
 float xacc1;
 float yacc1;
@@ -75,10 +75,9 @@ float toAcc(float value, float zero, float negative, float positive) {
 }
 
 float acc_scale(float value, float zero, float negative, float positive){
-  float temp = (value-zero)/(positive-negative) * 1023.0;
+  float temp = (value-zero)/(positive-negative) * *3.14159265358;
   
 
-  
   return temp;
 }
 

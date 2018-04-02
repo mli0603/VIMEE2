@@ -1,3 +1,4 @@
+#from scipy.signal import butter, lfilter, iirfilter, lfilter_zi, filtfilt
 
 WINDOWSIZE = 10 
 
@@ -5,6 +6,16 @@ acc1 = []
 acc2 = []
 us1 = [0,0,0]
 us2 = [0,0,0]
+
+# bandapss filter parameter
+a = []
+b = []
+f_sample = 100 # [Hz] samplig frequency
+order = 1
+
+# bandpass filter local array-like data
+_us1Data = []
+_us2Data = []
 
 # butterworth filter, sampling freq = 100 Hz, order = 1, low freq = 10Hz
 def BW_US1(x):
@@ -37,4 +48,41 @@ def MA_ACC2(x):
             acc2.pop(0)
             acc2.append(x)
 	return sum(acc2) / len(acc2)
+"""
+def findBWBandpassParameter(low, high):
+	'''
+	find the parameter a and b and set global parameter a and b
+	'''
+    
+	global a, b, order, f_sample
+	low = low / ( f_sample * 0.5 )
+	high = high / ( f_sample * 0.5 )
+	b, a = butter(order, [low, high], btype='band')
+
+def applyBWBandpassFilter(data):
+	'''
+	apply butterworth bandpass filter to data stream
+	Butterworth bandpass filter parameters must be calculated before applying the filter
+	call function findBWBandpassParameter() to find and set the bandpass filter parameters
+
+	return:
+		y: filtered data
+	'''
+	global a, b		
+	y, zf = lfilter(b, a, data)
+	return y
+
+def BWBP_US1(x):
+	if (len(_us1Data)<=WINDOWSIZE):
+		_us1Data.append(x)
+	
+	if(len(_us1Data) > WINDOWSIZE):
+		_us1Data.pop()
+
+	yArray = applyBWBandpassFilter(_us1Data)
+	y = yArray[-1]
+	
+	return y
+
+"""
 
