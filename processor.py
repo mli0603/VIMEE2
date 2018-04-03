@@ -142,7 +142,7 @@ def auto_pleat(cmd):
     elif cmd == CLAMP_PLEAT:
 	print 'Locating pleat'
 	servo_pub.publish(True)
-	while (True):
+	while (US2_DATA > 4.0 and US2_DATA<1000):
 		if getKey()=='p':
 			break
 		print US2_DATA
