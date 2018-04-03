@@ -231,6 +231,11 @@ void Roll(int8_t dir){
   }
 }
 
+void RollIn(){
+    Mot_A.drive(Default_speed, Mot_Polarity*fwd, trque_ctrl);
+    Mot_B.drive(Default_speed, Mot_Polarity*rev, trque_ctrl);
+}
+
 
 
 

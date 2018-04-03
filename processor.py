@@ -27,6 +27,7 @@ CLAMP_PLEAT = 'pleat_clamp'
 LOW_FREQ = 10
 HIGH_FREQ = 100
 US1_DATA = 999
+US2_DATA = 999
 
 ## kalman filter constants
 
@@ -71,8 +72,11 @@ def us1_callback(data):
     #us1_pub.publish(toCm(BWBP_US1(data.data)))
     US1_DATA = toCm(BW_US1(data.data))
 
+
 def us2_callback(data):
-    us2_pub.publish(toCm(BW_US2(data.data)))
+	global US2_DATA
+	us2_pub.publish(toCm(BW_US2(data.data)))
+	US2_DATA = toCm(BW_US2(data.data))
 
 
 # fsr callback, TODO: convert to force and then publish
@@ -119,12 +123,14 @@ def motor_control(cmd):
 # Pleat to Rib Automatically
 def auto_pleat(cmd):
     global US1_DATA
+    global US2_DATA
+
     print 'Sending command {} to motor'.format(cmd)
     if cmd == RUN_PLEAT:
         print 'Pleating started'
         motor_pub.publish(1)
         while (US1_DATA > 4.5):
-            if getKey()==PAUSE_PLEAT:
+            if getKey()=='p':
                 break
             print US1_DATA
         motor_pub.publish(0)
@@ -133,10 +139,16 @@ def auto_pleat(cmd):
     elif cmd == PAUSE_PLEAT:
         print 'Pleating paused'
         motor_pub.publish(0)
-    elif cmd == CLAMP_PLEAT
+    elif cmd == CLAMP_PLEAT:
 	print 'Locating pleat'
-	servo_pub.publish(true)
-
+	servo_pub.publish(True)
+	while (True):
+		if getKey()=='p':
+			break
+		print US2_DATA
+	servo_pub.publish(False)
+	print 'Pleat detected'
+	print 'Clamped down on pleat'
     else:
         print 'unknown command'
 
@@ -152,7 +164,7 @@ def listener():
     rospy.Subscriber('acc1', Float32, acc1_callback)
     rospy.Subscriber('acc2', Float32, acc2_callback)
     rospy.Subscriber('us1', Int64, us1_callback)
-    #rospy.Subscriber('us2', Int64, us2_callback)
+    rospy.Subscriber('us2', Int64, us2_callback)
     rospy.Subscriber('fsr1', Int16, fsr1_callback)
     rospy.Subscriber('fsr2', Int16, fsr2_callback)
 
@@ -200,10 +212,10 @@ if __name__ == '__main__':
         if k == 'q':
             print 'Quit'
             break
-        elif k == 'o':
+        elif k == 'c':
             #servo_control('open')
             servo_control('close') # servo is physically flipped to open the front claw
-        elif k == 'c':
+        elif k == 'o':
             #servo_control('close')
             servo_control('open') # servo is physically flipped to open the front claw
     	elif k == '1': motor_control(MOTOR_FORWARD_VOL_CMD)
@@ -214,5 +226,3 @@ if __name__ == '__main__':
     	elif k == 'r': auto_pleat(RUN_PLEAT)
    	elif k == 'p': auto_pleat(PAUSE_PLEAT)
 	elif k == 'l': auto_pleat(CLAMP_PLEAT)
-
-

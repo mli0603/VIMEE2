@@ -164,6 +164,10 @@ void servoloop(){
     if (servo_pos >= MAX) {
       servo_close = false;
       servo_pos = MAX;
+      
+      Mot_A.stop(); 
+      Mot_B.stop();   
+      dvr_sleep();
     }
   }
 }
@@ -176,6 +180,10 @@ void servo_setopenflag(){
 void servo_setcloseflag(){
   servo_open = false;
   servo_close = true;
+  
+  digitalWrite(DRV_Sleep,HIGH);     // enable DRV
+  RollIn();                         // must roll in so when closing with bag contact, 
+                                    // will not pull extra bag inwards
 }
 
 // blocking implementation
