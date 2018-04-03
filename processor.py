@@ -5,6 +5,7 @@ import sys
 import select
 import termios
 import tty
+
 from std_msgs.msg import Int8,Int16, Int64, Float32, Bool
 import time
 import numpy as np
@@ -18,10 +19,14 @@ MOTOR_FORWARD_VOL_CMD = 'fwd_vol'
 MOTOR_FORWARD_CUR_CMD = 'fwd_cur'
 MOTOR_REVERSE_VOL_CMD = 'rev_vol'
 MOTOR_REVERSE_CUR_CMD = 'rev_cur'
-MOTOR_STOP_CMD = 'stop'
+MOTOR_STOP_CMD = 'stop' 
+RUN_PLEAT = 'pleat_run'
+PAUSE_PLEAT = 'pleat_stop'
+CLAMP_PLEAT = 'pleat_clamp'
 
 LOW_FREQ = 10
 HIGH_FREQ = 100
+US1_DATA = 999
 
 ## kalman filter constants
 
@@ -61,9 +66,10 @@ def acc2_callback(data):
 
 # ultrasound callback, convert to cm, filter and then publish
 def us1_callback(data):
+    global US1_DATA
     us1_pub.publish(toCm(BW_US1(data.data)))
     #us1_pub.publish(toCm(BWBP_US1(data.data)))
-
+    US1_DATA = toCm(BW_US1(data.data))
 
 def us2_callback(data):
     us2_pub.publish(toCm(BW_US2(data.data)))
@@ -110,6 +116,31 @@ def motor_control(cmd):
     else:
         print 'unknown command'
 
+# Pleat to Rib Automatically
+def auto_pleat(cmd):
+    global US1_DATA
+    print 'Sending command {} to motor'.format(cmd)
+    if cmd == RUN_PLEAT:
+        print 'Pleating started'
+        motor_pub.publish(1)
+        while (US1_DATA > 4.5):
+            if getKey()==PAUSE_PLEAT:
+                break
+            print US1_DATA
+        motor_pub.publish(0)
+        print 'Rib detected'
+        print 'Pleating ended'
+    elif cmd == PAUSE_PLEAT:
+        print 'Pleating paused'
+        motor_pub.publish(0)
+    elif cmd == CLAMP_PLEAT
+	print 'Locating pleat'
+	servo_pub.publish(true)
+
+    else:
+        print 'unknown command'
+
+
 # listener function that subscribes all incoming arduino topics
 
 def listener():
@@ -121,7 +152,7 @@ def listener():
     rospy.Subscriber('acc1', Float32, acc1_callback)
     rospy.Subscriber('acc2', Float32, acc2_callback)
     rospy.Subscriber('us1', Int64, us1_callback)
-    rospy.Subscriber('us2', Int64, us2_callback)
+    #rospy.Subscriber('us2', Int64, us2_callback)
     rospy.Subscriber('fsr1', Int16, fsr1_callback)
     rospy.Subscriber('fsr2', Int16, fsr2_callback)
 
@@ -148,7 +179,7 @@ def getKey():
     else:
         key = ''
 
-    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+	termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
     return key
 
 
@@ -175,14 +206,13 @@ if __name__ == '__main__':
         elif k == 'c':
             #servo_control('close')
             servo_control('open') # servo is physically flipped to open the front claw
-	elif k == '1':
-             motor_control(MOTOR_FORWARD_VOL_CMD)
-	elif k == '2':
-             motor_control(MOTOR_FORWARD_CUR_CMD)   
-	elif k == '3':
-             motor_control(MOTOR_REVERSE_VOL_CMD)
-	elif k == '4':
-             motor_control(MOTOR_REVERSE_CUR_CMD)
-	elif k == '0':
-             motor_control(MOTOR_STOP_CMD)
+    	elif k == '1': motor_control(MOTOR_FORWARD_VOL_CMD)
+    	elif k == '2': motor_control(MOTOR_FORWARD_CUR_CMD)   
+    	elif k == '3': motor_control(MOTOR_REVERSE_VOL_CMD)
+    	elif k == '4': motor_control(MOTOR_REVERSE_CUR_CMD)
+    	elif k == '0': motor_control(MOTOR_STOP_CMD)
+    	elif k == 'r': auto_pleat(RUN_PLEAT)
+   	elif k == 'p': auto_pleat(PAUSE_PLEAT)
+	elif k == 'l': auto_pleat(CLAMP_PLEAT)
+
 
