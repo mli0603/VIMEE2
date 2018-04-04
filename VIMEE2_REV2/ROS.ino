@@ -24,6 +24,8 @@ std_msgs::Int16 fsr1_msg;
 ros::Publisher fsr1("fsr1", &fsr1_msg);
 std_msgs::Int16 fsr2_msg;
 ros::Publisher fsr2("fsr2", &fsr2_msg);
+std_msgs::Int16 pot1_msg;
+ros::Publisher pot1("pot1", &pot1_msg);
 
 // Servo
 std_msgs::Bool servo_msg;
@@ -53,8 +55,10 @@ void ROS_setup() {
   nh.advertise(us2);
   nh.advertise(fsr1);
   nh.advertise(fsr2);
+  nh.advertise(pot1);
   // incoming node(s)
   nh.subscribe(servo);
   nh.subscribe(motors);
+  
 }
 

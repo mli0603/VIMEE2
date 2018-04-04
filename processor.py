@@ -28,7 +28,8 @@ LOW_FREQ = 10
 HIGH_FREQ = 100
 US1_DATA = 999
 US2_DATA = 999
-FSR2_DATA = 9999;
+FSR2_DATA = 9999
+POT1_DATA = 9999
 
 ## kalman filter constants
 
@@ -88,6 +89,14 @@ def fsr1_callback(data):
 def fsr2_callback(data):
     global FSR2_DATA
     fsr2_pub.publish(LP_FSR2(data.data))
+
+
+# Pot1 Callback
+def pot1_callback(data):
+    global POT1_DATA
+    pot1_pub.publish(toAngle(LP_POT1(data.data)))
+    POT1_DATA = toAngle(LP_POT1(data.data))
+
 
 # control servo
 def servo_control(cmd):
@@ -171,18 +180,20 @@ def listener():
     rospy.Subscriber('us2', Int64, us2_callback)
     rospy.Subscriber('fsr1', Int16, fsr1_callback)
     rospy.Subscriber('fsr2', Int16, fsr2_callback)
+    rospy.Subscriber('pot1', Int16, pot1_callback)
 
 
 # talker function that publishes all outgoing processed data topics
 
 def talker():
-    global acc1_pub, acc2_pub, us1_pub, us2_pub, fsr1_pub, fsr2_pub, servo_pub, motor_pub
+    global acc1_pub, acc2_pub, us1_pub, us2_pub, fsr1_pub, fsr2_pub, servo_pub, motor_pub, pot1_pub
     acc1_pub = rospy.Publisher('acc1_processed', Float32, queue_size=10)
     acc2_pub = rospy.Publisher('acc2_processed', Float32, queue_size=10)
     us1_pub = rospy.Publisher('us1_processed', Float32, queue_size=10)
     us2_pub = rospy.Publisher('us2_processed', Float32, queue_size=10)
     fsr1_pub = rospy.Publisher('fsr1_processed', Int16, queue_size=10)
     fsr2_pub = rospy.Publisher('fsr2_processed', Int16, queue_size=10)
+    pot1_pub = rospy.Publisher('pot1_processed', Int16, queue_size=10)
     servo_pub = rospy.Publisher('servo', Bool, queue_size=1)
     motor_pub = rospy.Publisher('motors', Int8, queue_size=1)
 

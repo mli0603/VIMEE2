@@ -20,6 +20,8 @@ const int YACC2 = A3;                  // acc2: y-axis of the accelerometer
 const int FSR1 = A4; 
 const int FSR2 = A5; 
 
+const int POT1 = A11;
+
 const int TRIGPIN1 = 3;
 const int ECHOPIN1 = 2;
 const int TRIGPIN2 = 5;
@@ -67,6 +69,7 @@ void sensors_loop() {
     us2_msg.data = readUS2();
     fsr1_msg.data = analogRead(FSR1);
     fsr2_msg.data = analogRead(FSR2);
+    pot1_msg.data = analogRead(POT1);
     
     acc1.publish( &acc1_msg );
     acc2.publish( &acc2_msg );
@@ -74,6 +77,7 @@ void sensors_loop() {
     us2.publish( &us2_msg );
     fsr1.publish( &fsr1_msg );
     fsr2.publish( &fsr2_msg );
+    pot1.publish( &pot1_msg );
   }
   
   nh.spinOnce();
@@ -134,7 +138,7 @@ long readUS2() {
 
 void closeServo(){
    
-  if (millis() > last_time_servo + servo_movement_rate){
+  if (millis() > last_time_servo + servo_movement_rate*4){
     last_time_servo = millis();
     ser.write(servo_pos);              // tell servo to go to position in variable 'pos'
     servo_pos += 10;

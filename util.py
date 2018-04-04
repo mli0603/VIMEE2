@@ -6,3 +6,5 @@ def toDegree(radian):
 def toCm(duration):
     return (duration/2) / 29.1
 
+def toAngle(adc_val):
+    return adc_val*90/(872-493)

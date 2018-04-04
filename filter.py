@@ -8,6 +8,7 @@ us1 = [0,0,0]
 us2 = [0,0,0]
 fsr1 = [0,0]
 fsr2 = [0,0]
+pot1 = [0,0]
 
 # bandapss filter parameter
 a = []
@@ -33,11 +34,26 @@ def BW_US2(x):
 	us2[2] = (3.621681514928615665e-3 * x) + (-0.83718165125602272969 * us2[0]) + (1.82269492519630826877 * us2[1])
 	return (us2[0] + us2[2]) +2 * us2[1]
 
-# low pass filter
+
+# low pass filter FSR1
+def LP_FSR1(x):
+	fsr1[0]=fsr1[1]
+	fsr1[1]=(1.826903512279259290e-1 * x) + (0.634619297554414814209 * fsr1[0])
+	return (fsr1[0] + fsr1[1])
+	
+
+# low pass filter FSR2
 def LP_FSR2(x):
 	fsr2[0]=fsr2[1]
 	fsr2[1]=(1.826903512279259290e-1 * x) + (0.634619297554414814209 * fsr2[0])
 	return (fsr2[0] + fsr2[1])
+	
+
+# low pass filter POT1
+def LP_POT1(x):
+	pot1[0]=pot1[1]
+	pot1[1]=(1.826903512279259290e-1 * x) + (0.634619297554414814209 * pot1[0])
+	return (pot1[0] + pot1[1])
 	
 
 
