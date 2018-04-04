@@ -155,7 +155,7 @@ def auto_pleat(cmd):
         INIT_FSR2_DATA = FSR2_DATA
 	print 'Locating pleat'
 	servo_pub.publish(True)
-	while (US2_DATA > 4.0 and US2_DATA<1000 and (FSR2_DATA-INIT_FSR2_DATA)<75):
+	while (US2_DATA > 4.0 and US2_DATA<1000 and (FSR2_DATA-INIT_FSR2_DATA)<65):
 		if getKey()=='p':
 			break
 		print US2_DATA
