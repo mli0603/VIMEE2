@@ -28,6 +28,7 @@ LOW_FREQ = 10
 HIGH_FREQ = 100
 US1_DATA = 999
 US2_DATA = 999
+FSR2_DATA = 9999;
 
 ## kalman filter constants
 
@@ -85,7 +86,8 @@ def fsr1_callback(data):
 
 
 def fsr2_callback(data):
-    fsr2_pub.publish(data.data)
+    global FSR2_DATA
+    fsr2_pub.publish(LP_FSR2(data.data))
 
 # control servo
 def servo_control(cmd):
@@ -124,6 +126,7 @@ def motor_control(cmd):
 def auto_pleat(cmd):
     global US1_DATA
     global US2_DATA
+    global FSR2_DATA
 
     print 'Sending command {} to motor'.format(cmd)
     if cmd == RUN_PLEAT:
@@ -140,9 +143,10 @@ def auto_pleat(cmd):
         print 'Pleating paused'
         motor_pub.publish(0)
     elif cmd == CLAMP_PLEAT:
+        INIT_FSR2_DATA = FSR2_DATA
 	print 'Locating pleat'
 	servo_pub.publish(True)
-	while (US2_DATA > 4.0 and US2_DATA<1000):
+	while (US2_DATA > 4.0 and US2_DATA<1000 and (FSR2_DATA-INIT_FSR2_DATA)<75):
 		if getKey()=='p':
 			break
 		print US2_DATA
