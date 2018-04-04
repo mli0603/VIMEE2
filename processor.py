@@ -29,7 +29,7 @@ HIGH_FREQ = 100
 US1_DATA = 999
 US2_DATA = 999
 FSR2_DATA = 9999
-POT1_DATA = 9999
+POT1_DATA = 0
 
 ## kalman filter constants
 
@@ -136,12 +136,13 @@ def auto_pleat(cmd):
     global US1_DATA
     global US2_DATA
     global FSR2_DATA
+    global POT1_DATA
 
     print 'Sending command {} to motor'.format(cmd)
     if cmd == RUN_PLEAT:
         print 'Pleating started'
         motor_pub.publish(1)
-        while (US1_DATA > 4.5):
+        while (US1_DATA > -0.2586*POT1_DATA+55.601):
             if getKey()=='p':
                 break
             print US1_DATA
